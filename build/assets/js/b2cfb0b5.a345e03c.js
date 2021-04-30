@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[26],{96:function(e){e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"Hosten Angular in Azure","permalink":"/blog/hosten-angular-in-azure"},{"title":"Deployen OSRM in Azure","permalink":"/blog/deployen-osrm-in-azure"}]}')}}]);
