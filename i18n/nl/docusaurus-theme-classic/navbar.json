@@ -1,0 +1,14 @@
+{
+  "title": {
+    "message": "Covadis Innovatielab",
+    "description": "De titel in de navigatiebalk"
+  },
+  "item.label.Tutorials": {
+    "message": "Tutorials",
+    "description": "Navbar item met label Tutorials"
+  },
+  "item.label.Blog": {
+    "message": "Blog",
+    "description": "Navbar item met label Blog"
+  }
+}

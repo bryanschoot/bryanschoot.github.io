@@ -1,0 +1,18 @@
+{
+  "version.label": {
+    "message": "Volgende",
+    "description": "Het label voor de huidige versie"
+  },
+  "sidebar.tutorialSidebar.category.Docusaurus": {
+    "message": "Docusaurus",
+    "description": "Het label voor categorie Docusaurus in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Tutorial - Basics": {
+    "message": "Tutorial - Basics",
+    "description": "Het label voor categorie Tutorial - Basics in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Tutorial - Extra's": {
+    "message": "Tutorial - Extra's",
+    "description": "Het label voor categorie Tutorial - Extra's in zijbalk tutorialSidebar"
+  }
+}

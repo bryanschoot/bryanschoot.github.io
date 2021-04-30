@@ -1,0 +1,158 @@
+{
+  "theme.NotFound.title": {
+    "message": "Pagina niet gevonden",
+    "description": "De titel van de 404-pagina"
+  },
+  "theme.NotFound.p1": {
+    "message": "We konden niet vinden wat u zocht.",
+    "description": "De eerste paragraaf van de 404 pagina"
+  },
+  "theme.NotFound.p2": {
+    "message": "Neem contact op met de eigenaar van de site die u naar de oorspronkelijke URL heeft gelinkt en laat hem weten dat hun link verbroken is.",
+    "description": "De tweede paragraaf van de 404 pagina"
+  },
+  "theme.AnnouncementBar.closeButtonAriaLabel": {
+    "message": "Sluiten",
+    "description": "Het ARIA label voor de sluitingsknop van de aankondigingsbalk"
+  },
+  "theme.blog.paginator.navAriaLabel": {
+    "message": "Blog list page navigation",
+    "description": "Blog lijst pagina navigatie"
+  },
+  "theme.blog.paginator.newerEntries": {
+    "message": "Newer Entries",
+    "description": "Het label dat wordt gebruikt om te navigeren naar de pagina met nieuwere blogberichten (vorige pagina)"
+  },
+  "theme.blog.paginator.olderEntries": {
+    "message": "Older Entries",
+    "description": "Het label dat wordt gebruikt om te navigeren naar de pagina met oudere blogberichten (volgende pagina)"
+  },
+  "theme.blog.post.readingTime.plurals": {
+    "message": "{readingTime} min lezen",
+    "description": "Meervoudig label voor {readingTime} min lezen. Gebruik zoveel meervoudsvormen (gescheiden door |) als uw taal ondersteunt (zie https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.tags.tagsListLabel": {
+    "message": "Tags:",
+    "description": "Het label naast een tag-lijst"
+  },
+  "theme.blog.post.readMore": {
+    "message": "Read More",
+    "description": "Het label dat in uittreksels van blogpostitems wordt gebruikt om te linken naar volledige blogposts."
+  },
+  "theme.blog.post.paginator.navAriaLabel": {
+    "message": "Blogpost paginanavigatie",
+    "description": "Het ARIA-label voor de paginatie van de blogberichten"
+  },
+  "theme.blog.post.paginator.newerPost": {
+    "message": "Newer Post",
+    "description": "Het blogpost-knoplabel om naar het nieuwere/vorige bericht te navigeren."
+  },
+  "theme.blog.post.paginator.olderPost": {
+    "message": "Oudere post",
+    "description": "Het blogpost-knoplabel om naar de oudere/volgende post te navigeren."
+  },
+  "theme.tags.tagsPageTitle": {
+    "message": "Tags",
+    "description": "De titel van de tag lijst pagina"
+  },
+  "theme.blog.post.plurals": {
+    "message": "Een post|{count} posts",
+    "description": "Meervoudig label voor {count} posts. Gebruik zoveel meervoudsvormen (gescheiden door |) als je taal ondersteunt (zie https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)."
+  },
+  "theme.blog.tagTitle": {
+    "message": "{nPosts} getagged met {tagName}",
+    "description": "De titel van de pagina voor een blog tag"
+  },
+  "theme.tags.tagsPageLink": {
+    "message": "Bekijk alle tags",
+    "description": "Het label van de link die gericht is op de taglijstpagina"
+  },
+  "theme.CodeBlock.copyButtonAriaLabel": {
+    "message": "Kopieer code naar klembord",
+    "description": "Het ARIA-label voor de knop Kopieercodeblokken"
+  },
+  "theme.CodeBlock.copied": {
+    "message": "Gekopieerd",
+    "description": "Het gekopieerde knoplabel op codeblokken"
+  },
+  "theme.CodeBlock.copy": {
+    "message": "Kopiëren",
+    "description": "Het label van de kopieerknop op codeblokken"
+  },
+  "theme.docs.sidebar.expandButtonTitle": {
+    "message": "Breid zijbalk uit",
+    "description": "Het ARIA label en title attribuut voor expand button van doc sidebar"
+  },
+  "theme.docs.sidebar.expandButtonAriaLabel": {
+    "message": "Breid zijbalk uit",
+    "description": "Het ARIA label en title attribuut voor expand button van doc sidebar"
+  },
+  "theme.docs.paginator.navAriaLabel": {
+    "message": "Docs pagina's navigatie",
+    "description": "Het ARIA-label voor de docs-paginatie"
+  },
+  "theme.docs.paginator.previous": {
+    "message": "Vorige",
+    "description": "Het label dat wordt gebruikt om naar het vorige doc te navigeren"
+  },
+  "theme.docs.paginator.next": {
+    "message": "Volgende",
+    "description": "Het label dat wordt gebruikt om naar de volgende doc te navigeren"
+  },
+  "theme.docs.sidebar.collapseButtonTitle": {
+    "message": "Zijbalk samenvouwen",
+    "description": "Het titelattribuut voor de collapse-knop van docs sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonAriaLabel": {
+    "message": "Zijbalk samenvouwen",
+    "description": "Het titelattribuut voor inklapknop van docs sidebar"
+  },
+  "theme.docs.sidebar.responsiveCloseButtonLabel": {
+    "message": "Menu sluiten",
+    "description": "Het ARIA-label voor sluitknop van mobiele docs sidebar"
+  },
+  "theme.docs.sidebar.responsiveOpenButtonLabel": {
+    "message": "Open menu",
+    "description": "Het ARIA-label voor openknop van mobiele docs sidebar"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "Dit is nog niet uitgebrachte documentatie voor {siteTitle} {versieLabel} versie.",
+    "description": "Het label dat wordt gebruikt om de gebruiker te vertellen dat hij een nog niet uitgebrachte doc-versie bekijkt."
+  },
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "Dit is documentatie voor {siteTitle} {versionLabel}, die niet langer actief wordt onderhouden.",
+    "description": "Het label dat wordt gebruikt om de gebruiker te vertellen dat hij een niet-onderhouden doc-versie aan het browsen is."
+  },
+  "theme.docs.versions.latestVersionSuggestionLabel": {
+    "message": "Voor actuele documentatie, zie de {latestVersionLink} ({versionLabel}).",
+    "description": "Het label userd om de gebruiker te vertellen dat hij een niet-onderhouden doc-versie aan het browsen is."
+  },
+  "theme.docs.versions.latestVersionLinkLabel": {
+    "message": "latest version",
+    "description": "Het label dat wordt gebruikt voor de laatste versie suggestie link label"
+  },
+  "theme.common.editThisPage": {
+    "message": "Bewerk deze pagina",
+    "description": "Het linklabel om de huidige pagina te bewerken"
+  },
+  "theme.common.headingLinkTitle": {
+    "message": "Directe link naar koptekst",
+    "description": "Titel voor link naar heading"
+  },
+  "theme.lastUpdated.atDate": {
+    "message": " op {datum}",
+    "description": "De woorden die worden gebruikt om te beschrijven op welke datum een pagina voor het laatst is bijgewerkt."
+  },
+  "theme.lastUpdated.byUser": {
+    "message": " door {gebruiker}",
+    "description": "De woorden die worden gebruikt om te beschrijven door wie de pagina voor het laatst is bijgewerkt."
+  },
+  "theme.lastUpdated.lastUpdatedAtBy": {
+    "message": "Last updated{atDate}{byUser}",
+    "description": "De zin die wordt gebruikt om weer te geven wanneer een pagina voor het laatst is bijgewerkt, en door wie"
+  },
+  "theme.common.skipToMainContent": {
+    "message": "Ga naar de hoofdinhoud",
+    "description": "Het label skip to content dat wordt gebruikt voor toegankelijkheid, waardoor snel naar de hoofdinhoud kan worden genavigeerd met toetsenbord tab/enter navigatie."
+  }
+}
