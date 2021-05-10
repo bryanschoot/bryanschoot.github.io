@@ -84,6 +84,6 @@ Nadat de CI/CD workflow afgerond is kun je in de logs terugvinden waar de Angula
 
 ![workflow](/img/hosten-angular-applicatie/finished-build-workflow.png)
 
-# Conclusie
+## Conclusie
 
 Het deployen van zowel een App Service als Static Web App is snel en gemakkelijk uit te voeren met behulp van de tooling die Microsoft levert. Zo heb je in minder als 3min een Angular website werkend in de cloud.
