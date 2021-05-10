@@ -5,22 +5,8 @@ import Link from '@docusaurus/Link';
 
 const FeatureList = [
   {
-    title: 'Tutorials',
-    Svg: require('../../static/img/undraw_docusaurus_react.svg').default,
-    description: (
-      <>
-        Druk op de onderstaande knop en volg verchillende Tutorials, 
-        allemaal geschreven en uitgevoerd tijdens het afstuderen.
-      </>
-    ),
-    button: {
-      text: 'Naar Turorials ➜',
-      link: '/docs/intro'
-    }
-  },
-  {
     title: 'Blog',
-    Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
+    Svg: require('../../static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
         Druk op de onderstaande knop om verschillende Blog posts te lezen 

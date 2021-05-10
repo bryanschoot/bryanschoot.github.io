@@ -5,7 +5,7 @@ module.exports = {
     locales: ['nl'],
   },
   title: 'Covadis Innovatielab',
-  tagline: 'Deze website is opgezet voor de afstudeerstage van Bryan Schoot bij Covadis',
+  tagline: 'Deze website is opgezet tijdens de afstudeerstage van Bryan Schoot bij Covadis',
   url: 'https://bryanschoot.github.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
