@@ -30,7 +30,7 @@ Als de npm installatie voltooid is kunnen we met behulp van de `angular cli` het
 
 Heb je de `angular cli` niet geinstalleerd [klik hier . . .](https://angular.io/cli) Het resultaat moet er als volgt uitzien.
 
-![angular first project](..\static\img\hosten-angular-applicatie\angular-toh.png)
+![angular first project](/img/hosten-angular-applicatie/angular-toh.png)
 
 Om de Angular applicatie te Deployen moet er eerst een
 build gemaakt worden. Dit doen we met het volgende commando `ng build`. Dit maakt een folder aan genaamd `dist`.
@@ -41,17 +41,17 @@ En tot slot openen we de applicatie in `Visual Studio Code` voor meer informatie
 
 Binnen `Visual Studio Code` gaan we gebruik maken van de volgende plugin `Azure App Service` dat er als volgt uitziet.
 
-![angular first project](..\static\img\hosten-angular-applicatie\angular-vscode-service-app-plugin.png)
+![angular first project](/img/hosten-angular-applicatie/angular-vscode-service-app-plugin.png)
 
 Vervolgens melden we ons aan via de geinstalleerde plugin. En krijgen we toegang tot onze Azure Portal omgeving.
 
 Daarna doen we een rechtermuisklik op de folder `dist` en dan kiezen we voor de optie `Deploy to Webb App...`
 
-![angular first project](..\static\img\hosten-angular-applicatie\dist-deploy.png)
+![angular first project](/img/hosten-angular-applicatie/dist-deploy.png)
 
 Als je nog geen webapp hebt maak dan een nieuwe aan. Kies voor `.NET Core 3.1` als runtime stack. Als je vervolgens de `terminal` opent met als tab `OUTPUT` kun je vinden op welke link de applicatie is gedeployed.
 
-![angular first project](..\static\img\hosten-angular-applicatie\deployment-link.png)
+![angular first project](/img/hosten-angular-applicatie/deployment-link.png)
 
 Klik op de link en zie vervolgende de Angular Tour of Heroes applicatie in zijn volle glorie.
 
@@ -59,13 +59,13 @@ Klik op de link en zie vervolgende de Angular Tour of Heroes applicatie in zijn 
 
 Binnen `Visual Studio Code` gaan we gebruik maken van de volgende plugin `Azure Static Web Apps` dat er als volgt uitziet.
 
-![static web app vstool](..\static\img\hosten-angular-applicatie\static-webb-app-tool.png)
+![static web app vstool](/img/hosten-angular-applicatie/static-webb-app-tool.png)
 
 Nog niet aangemeld op Azure met de plugin doe dit dan!
 
 Daarna selecteer via het menu selecteer het Azure icoon en maak een nieuwe static web app aan. Als dit is gelukt wordt er gevraagd in te loggen met Github.
 
-![static web app vstool](..\static\img\hosten-angular-applicatie\static-web-app-deployment.png)
+![static web app vstool](/img/hosten-angular-applicatie/static-web-app-deployment.png)
 
 Voor het daadwerkelijk deployen volg de onderstaande stappen:
 
@@ -78,12 +78,12 @@ Voor het daadwerkelijk deployen volg de onderstaande stappen:
 
 Dit maakt meteen binnen Github een workflow aan die de Angular applicatie deployed met behulp van CI/CD. Dit ziet er als volgt uit:
 
-![workflow](..\static\img\hosten-angular-applicatie\workflow.png)
+![workflow](/img/hosten-angular-applicatie/workflow.png)
 
 Nadat de CI/CD workflow afgerond is kun je in de logs terugvinden waar de Angular applicatie is gedeployed.finished-build-workflow
 
-![workflow](..\static\img\hosten-angular-applicatie\finished-build-workflow.png)
+![workflow](/img/hosten-angular-applicatie/finished-build-workflow.png)
 
 # Conclusie
 
-Het deployen van zowel een App Service als Static Web App is snel en gemakkelijk uit te voeren.
+Het deployen van zowel een App Service als Static Web App is snel en gemakkelijk uit te voeren met behulp van de tooling die Microsoft levert. Zo heb je in minder als 3min een Angular website werkend in de cloud.
