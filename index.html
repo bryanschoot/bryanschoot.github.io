@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>String Art Studio — Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{--wood:#3b2f2f;--accent:#0ea5e9}
+    .glass{background:rgba(255,255,255,.6);backdrop-filter: blur(10px)}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1rem;border-radius:9999px;border:1px solid rgb(226 232 240)}
+    .btn:hover{box-shadow:0 6px 16px rgba(0,0,0,.06)}
+    .range{accent-color:var(--accent)}
+    canvas{image-rendering: pixelated}
+    .pin{fill:#94a3b8}
+    .wood{background:radial-gradient(1200px 600px at 50% -200px, #6b4f4f 0, #3b2f2f 60%, #2a2222 100%)}
+  </style>
+</head>
+<body class="min-h-screen wood text-slate-900">
+  <div class="max-w-[1250px] mx-auto py-6 px-4">
+    <header class="mb-6 flex items-center justify-between">
+      <h1 class="text-2xl md:text-3xl font-semibold tracking-tight flex items-center gap-3 text-white">
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-sky-500 text-white">SA</span>
+        String Art Studio <span class="hidden md:inline text-slate-300">— Pro</span>
+      </h1>
+      <div class="flex flex-wrap gap-2">
+        <button id="btnExportSVG" class="btn">Export SVG</button>
+        <button id="btnExportPNG" class="btn">Export PNG</button>
+        <button id="btnSaveJSON" class="btn">Save JSON</button>
+        <label class="btn cursor-pointer">
+          <input id="jsonLoad" type="file" accept="application/json" class="hidden"/>
+          Load JSON
+        </label>
+      </div>
+    </header>
+
+    <div class="grid gap-6 md:grid-cols-[380px_1fr]">
+      <!-- Sidebar controls -->
+      <aside class="glass rounded-2xl p-4 shadow-soft">
+        <h2 class="font-semibold mb-3">Bronafbeelding</h2>
+        <div id="drop" class="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center cursor-pointer hover:bg-white">
+          <input id="file" type="file" accept="image/*" class="hidden"/>
+          <p class="text-sm text-slate-500">Sleep een afbeelding hierheen of klik om te kiezen</p>
+        </div>
+        <div class="mt-3 flex items-center gap-3">
+          <img id="thumb" class="w-10 h-10 object-cover rounded-lg hidden" alt="thumb"/>
+          <span id="imgInfo" class="text-xs text-slate-500"></span>
+        </div>
+
+        <h2 class="font-semibold mt-6 mb-2">Bord</h2>
+        <label class="block text-sm">Aantal pinnen: <span id="lblPins" class="font-medium"></span></label>
+        <input id="pins" class="range w-full" type="range" min="40" max="360" step="4" value="200"/>
+
+        <label class="block text-sm mt-3">Diameter (px): <span id="lblSize" class="font-medium"></span></label>
+        <input id="size" class="range w-full" type="range" min="256" max="1024" step="64" value="640"/>
+
+        <div class="grid grid-cols-2 gap-3 mt-3">
+          <div>
+            <label class="block text-sm">Lijndikte</label>
+            <input id="thickness" class="range w-full" type="range" min="0.2" max="2.0" step="0.1" value="0.7"/>
+          </div>
+          <div>
+            <label class="block text-sm">Transparantie</label>
+            <input id="alpha" class="range w-full" type="range" min="0.05" max="1" step="0.05" value="0.25"/>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mt-3">
+          <div>
+            <label class="block text-sm">Lijnkleur</label>
+            <input id="lineColor" type="color" value="#111827" class="w-full h-10 rounded-lg border border-slate-200"/>
+          </div>
+          <div>
+            <label class="block text-sm">Achtergrond</label>
+            <input id="bgColor" type="color" value="#ffffff" class="w-full h-10 rounded-lg border border-slate-200"/>
+          </div>
+        </div>
+
+        <h2 class="font-semibold mt-6 mb-2">Voorbewerking</h2>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm">Helderheid</label>
+            <input id="brightness" class="range w-full" type="range" min="-100" max="100" step="1" value="0"/>
+          </div>
+          <div>
+            <label class="block text-sm">Contrast</label>
+            <input id="contrast" class="range w-full" type="range" min="-100" max="100" step="1" value="0"/>
+          </div>
+          <div>
+            <label class="block text-sm">Gamma</label>
+            <input id="gamma" class="range w-full" type="range" min="0.3" max="2.2" step="0.05" value="1"/>
+          </div>
+          <div>
+            <label class="block text-sm">Edge boost</label>
+            <input id="edge" class="range w-full" type="range" min="0" max="2" step="0.05" value="0"/>
+          </div>
+        </div>
+        <label class="inline-flex items-center gap-2 mt-2 text-sm">
+          <input id="invert" type="checkbox"/> Inverteer
+        </label>
+
+        <h2 class="font-semibold mt-6 mb-2">Algoritme</h2>
+        <label class="block text-sm">Aantal lijnen: <span id="lblLines" class="font-medium"></span></label>
+        <input id="lines" class="range w-full" type="range" min="200" max="6000" step="50" value="2000"/>
+
+        <div class="grid grid-cols-2 gap-3 mt-3">
+          <div>
+            <label class="block text-sm">Min. pin-sprong</label>
+            <input id="minHop" class="range w-full" type="range" min="1" max="30" step="1" value="6"/>
+          </div>
+          <div>
+            <label class="block text-sm">Startpin</label>
+            <input id="startPin" class="range w-full" type="range" min="0" max="359" step="1" value="0"/>
+          </div>
+        </div>
+
+        <div class="mt-4 flex flex-wrap gap-2">
+          <button id="btnGenerate" class="btn">Genereren</button>
+          <button id="btnStep" class="btn">1 stap</button>
+          <button id="btnPause" class="btn">Pauze</button>
+          <button id="btnClear" class="btn">Wissen</button>
+        </div>
+        <p id="status" class="text-xs text-slate-600 mt-3">Klaar.</p>
+      </aside>
+
+      <!-- Preview / Output -->
+      <main class="space-y-4">
+        <div class="grid md:grid-cols-2 gap-4">
+          <section class="glass rounded-2xl p-4 shadow-soft">
+            <h3 class="font-semibold mb-2">Voorverwerking</h3>
+            <canvas id="srcCanvas" class="w-full rounded-lg border border-slate-200"></canvas>
+          </section>
+          <section class="glass rounded-2xl p-4 shadow-soft">
+            <h3 class="font-semibold mb-2">String Art Vooruitgang</h3>
+            <canvas id="artCanvas" class="w-full rounded-lg border border-slate-200"></canvas>
+          </section>
+        </div>
+
+        <section class="glass rounded-2xl p-4 shadow-soft">
+          <h3 class="font-semibold mb-2">Pad (pin-indexen)</h3>
+          <textarea id="pathOut" class="w-full h-40 text-xs font-mono rounded-xl border border-slate-200 p-2" placeholder="Pad verschijnt hier…" readonly></textarea>
+          <div class="mt-2 text-xs text-slate-600">Tip: Bewaar als JSON en ga later verder op exact hetzelfde resultaat.</div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // --- Helpers ---
+    const $ = (id) => document.getElementById(id);
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const pairKey = (a,b) => a<b ? a+"-"+b : b+"-"+a;
+
+    // --- State ---
+    const state = {
+      img: null,
+      diameter: 640,
+      pins: 200,
+      lines: 2000,
+      thickness: 0.7,
+      alpha: 0.25,
+      lineColor: '#111827',
+      bgColor: '#ffffff',
+      minHop: 6,
+      startPin: 0,
+      running: false,
+      paused: false,
+      ring: [], // pin positions
+      path: [],
+      target: null, // Float32Array grayscale (1=dark)
+      current: null, // Float32Array accumulated darkness
+      W: 0, H: 0,
+      // preprocessing
+      brightness: 0,
+      contrast: 0,
+      gamma: 1,
+      edge: 0,
+      invert: false,
+      // caches
+      lineCache: new Map(), // key = "a-b" => Uint32Array indices
+    };
+
+    // --- UI wiring ---
+    function syncLabels(){
+      $('lblPins').textContent = state.pins;
+      $('lblLines').textContent = state.lines;
+      $('lblSize').textContent = state.diameter;
+      $('startPin').max = Math.max(0, state.pins-1);
+    }
+
+    ['pins','lines','size','thickness','alpha','minHop','startPin'].forEach(id=>{
+      $(id).addEventListener('input', e=>{
+        const v = +e.target.value;
+        state[id==='size'?'diameter':id] = v;
+        if(id==='pins'){ buildRing(); drawBoard(); }
+        if(id==='size'){ resizeCanvases(); buildRing(); renderTarget(); drawBoard(); }
+        if(id==='thickness' || id==='alpha'){ /* immediate effect on draw */ }
+        syncLabels();
+      });
+    });
+
+    $('lineColor').addEventListener('input', e=>{state.lineColor=e.target.value; drawBoard();});
+    $('bgColor').addEventListener('input', e=>{state.bgColor=e.target.value; drawBoard();});
+
+    ;[['brightness','brightness'],['contrast','contrast'],['gamma','gamma'],['edge','edge']]
+      .forEach(([id,key])=>$(id).addEventListener('input', e=>{state[key]=+e.target.value; renderTarget();}));
+    $('invert').addEventListener('change', e=>{state.invert=e.target.checked; renderTarget();});
+
+    $('btnClear').addEventListener('click', ()=>{state.path=[]; resetCurrent(); drawBoard(); dumpPath();});
+    $('btnPause').addEventListener('click', ()=>{state.paused=!state.paused; $('btnPause').textContent = state.paused? 'Doorgaan' : 'Pauze'; if(!state.paused && state.running) tickLoop();});
+    $('btnStep').addEventListener('click', ()=>{ if(!state.target){setStatus('Upload eerst een afbeelding.'); return} if(!state.path.length){state.path=[state.startPin%state.pins]} stepOnce(); });
+
+    $('btnGenerate').addEventListener('click', ()=>run());
+
+    $('btnExportPNG').addEventListener('click', exportPNG);
+    $('btnExportSVG').addEventListener('click', exportSVG);
+    $('btnSaveJSON').addEventListener('click', saveJSON);
+    $('jsonLoad').addEventListener('change', loadJSON);
+
+    const drop = $('drop');
+    drop.addEventListener('click', ()=> $('file').click());
+    drop.addEventListener('dragover', e=>{e.preventDefault(); drop.classList.add('bg-white')});
+    drop.addEventListener('dragleave', ()=> drop.classList.remove('bg-white'));
+    drop.addEventListener('drop', (e)=>{
+      e.preventDefault(); drop.classList.remove('bg-white');
+      const files = e.dataTransfer && e.dataTransfer.files;
+      handleFile(files && files.length ? files[0] : null);
+    });
+    $('file').addEventListener('change', (e)=> handleFile(e.target.files[0]));
+
+    function setStatus(msg){ $('status').textContent = msg; }
+
+    // --- Canvases ---
+    const srcCanvas = $('srcCanvas');
+    const srcCtx = srcCanvas.getContext('2d');
+    const artCanvas = $('artCanvas');
+    const artCtx = artCanvas.getContext('2d');
+
+    function resizeCanvases(){
+      const d = state.diameter;
+      srcCanvas.width = srcCanvas.height = d;
+      artCanvas.width = artCanvas.height = d;
+      state.W = state.H = d;
+      state.lineCache.clear(); // size changed => invalidate caches
+    }
+
+    function drawBoard(){
+      const d = state.diameter; const r = d/2; const cx=r, cy=r;
+      artCtx.save();
+      artCtx.clearRect(0,0,d,d);
+      artCtx.fillStyle = state.bgColor; artCtx.fillRect(0,0,d,d);
+      // board circle
+      artCtx.globalAlpha = 1;
+      artCtx.beginPath(); artCtx.arc(cx, cy, r-1, 0, Math.PI*2); artCtx.strokeStyle = '#e5e7eb'; artCtx.lineWidth = 2; artCtx.stroke();
+      // pins
+      artCtx.fillStyle = '#94a3b8';
+      state.ring.forEach(p=>{ artCtx.beginPath(); artCtx.arc(p.x, p.y, 2, 0, Math.PI*2); artCtx.fill(); });
+      // already drawn string
+      artCtx.globalAlpha = 1; artCtx.lineCap='round'; artCtx.lineJoin='round';
+      artCtx.strokeStyle = state.lineColor; artCtx.lineWidth = state.thickness;
+      for(let i=1;i<state.path.length;i++){
+        const a = state.ring[state.path[i-1]]; const b = state.ring[state.path[i]];
+        artCtx.beginPath(); artCtx.moveTo(a.x,a.y); artCtx.lineTo(b.x,b.y); artCtx.stroke();
+      }
+      artCtx.restore();
+    }
+
+    function buildRing(){
+      const d = state.diameter; const r = d/2 - 4; const cx=r+4, cy=r+4;
+      state.ring = [];
+      for(let i=0;i<state.pins;i++){
+        const t = i/state.pins * Math.PI*2;
+        state.ring.push({x: cx + r*Math.cos(t), y: cy + r*Math.sin(t)});
+      }
+      $('startPin').max = Math.max(0, state.pins-1);
+      state.lineCache.clear();
+    }
+
+    function handleFile(file){
+      if(!file){ setStatus('Geen bestand geselecteerd.'); return; }
+      if(!file.type || !file.type.startsWith('image/')){ setStatus('Dit lijkt geen afbeelding te zijn.'); return; }
+      setStatus('Afbeelding laden…');
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = reader.result;
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          state.img = img;
+          const thumb = $('thumb');
+          thumb.src = dataUrl; thumb.classList.remove('hidden');
+          $('imgInfo').textContent = `${img.naturalWidth}×${img.naturalHeight}`;
+          renderTarget();
+          setStatus('Afbeelding geladen.');
+        };
+        img.onerror = () => {
+          setStatus('Kon de afbeelding niet laden. Probeer een JPG, PNG of WEBP.');
+        };
+        img.src = dataUrl;
+      };
+      reader.onerror = () => setStatus('Lezen van bestand mislukt.');
+      reader.readAsDataURL(file);
+    }
+
+    // --- Image preprocessing: brightness/contrast/gamma + optional Sobel edge boost ---
+    function preprocessToTarget(){
+      const d = state.diameter; const r = d/2; const cx=r, cy=r;
+      srcCtx.clearRect(0,0,d,d);
+      if(!state.img){
+        // placeholder
+        srcCtx.fillStyle = '#f1f5f9'; srcCtx.fillRect(0,0,d,d);
+        srcCtx.fillStyle = '#94a3b8'; srcCtx.font = '600 14px ui-sans-serif, system-ui';
+        srcCtx.fillText('Geen afbeelding — gebruik upload', 14, 24);
+        const out = new Float32Array(d*d); // zeros
+        return out;
+      }
+      // cover fit
+      const iw = state.img.naturalWidth, ih = state.img.naturalHeight;
+      const s = Math.max(d/iw, d/ih);
+      const w = iw*s, h = ih*s;
+      const ox = (d - w)/2, oy = (d - h)/2;
+      srcCtx.drawImage(state.img, ox, oy, w, h);
+
+      let imgData = srcCtx.getImageData(0,0,d,d);
+      const data = imgData.data;
+      const out = new Float32Array(d*d);
+
+      const br = state.brightness/100; // -1..1 roughly
+      const ct = state.contrast/100;   // -1..1
+      const gm = state.gamma;          // 0.3..2.2
+      const eg = state.edge;           // 0..2
+      const inv = state.invert;
+
+      // first pass: grayscale + tone mapping
+      for(let y=0;y<d;y++){
+        for(let x=0;x<d;x++){
+          const i = (y*d + x); const k = i*4;
+          // luminance
+          let L = 0.2126*data[k] + 0.7152*data[k+1] + 0.0722*data[k+2]; // 0..255
+          // brightness/contrast (simple)
+          let v = L/255;
+          v = v + br;                      // brightness
+          v = (v-0.5)*(1+ct) + 0.5;       // contrast
+          v = clamp(v,0,1);
+          // gamma
+          v = Math.pow(v, 1/gm);
+          // invert if requested (we invert luminance before convert to darkness)
+          if(inv) v = 1-v;
+          // convert to darkness target = 1-v
+          let dark = 1 - v;
+          // mask outside circle
+          const dx=x-r, dy=y-r; if(dx*dx + dy*dy > (r-2)*(r-2)) dark = 0;
+          out[i] = dark;
+          // write preview grayscale to canvas
+          const u = Math.round((1-dark)*255);
+          data[k]=data[k+1]=data[k+2]=u; data[k+3]=255;
+        }
+      }
+
+      // optional edge boost via Sobel magnitude blended into darkness
+      if(eg > 0){
+        const sob = new Float32Array(d*d);
+        const gx = [-1,0,1,-2,0,2,-1,0,1];
+        const gy = [-1,-2,-1,0,0,0,1,2,1];
+        for(let y=1;y<d-1;y++){
+          for(let x=1;x<d-1;x++){
+            let sx=0, sy=0;
+            let idx=0;
+            for(let j=-1;j<=1;j++){
+              for(let i=-1;i<=1;i++){
+                const p = (y+j)*d + (x+i);
+                sx += out[p]*gx[idx];
+                sy += out[p]*gy[idx];
+                idx++;
+              }
+            }
+            const m = Math.min(1, Math.hypot(sx,sy));
+            sob[y*d + x] = m;
+          }
+        }
+        const a = clamp(eg,0,2);
+        for(let i=0;i<out.length;i++) out[i] = clamp(out[i]*(1) + sob[i]*a*0.7, 0, 1);
+      }
+
+      srcCtx.putImageData(imgData,0,0);
+      return out;
+    }
+
+    function renderTarget(){
+      resizeCanvases();
+      const target = preprocessToTarget();
+      state.target = target;
+      resetCurrent();
+      buildRing();
+      drawBoard();
+      setStatus('Doelbeeld klaar.');
+    }
+
+    function resetCurrent(){
+      const N = state.diameter*state.diameter;
+      state.current = new Float32Array(N); // zeros
+    }
+
+    // Sample along a line; cached per pin pair
+    function sampleLineIndices(ax, ay, bx, by){
+      // Bresenham-like
+      const points = [];
+      let x0=Math.round(ax), y0=Math.round(ay), x1=Math.round(bx), y1=Math.round(by);
+      const dx = Math.abs(x1-x0), dy = Math.abs(y1-y0);
+      const sx = x0<x1?1:-1, sy = y0<y1?1:-1;
+      let err = dx - dy;
+      const W = state.W;
+      while(true){
+        points.push(y0*W + x0);
+        if(x0===x1 && y0===y1) break;
+        const e2 = 2*err;
+        if(e2 > -dy){ err -= dy; x0 += sx; }
+        if(e2 <  dx){ err += dx; y0 += sy; }
+      }
+      return Uint32Array.from(points);
+    }
+
+    function getLineIndices(aIdx,bIdx){
+      const key = pairKey(aIdx,bIdx);
+      let arr = state.lineCache.get(key);
+      if(arr) return arr;
+      const a = state.ring[aIdx], b = state.ring[bIdx];
+      arr = sampleLineIndices(a.x,a.y,b.x,b.y);
+      state.lineCache.set(key, arr);
+      return arr;
+    }
+
+    // score = how much darker target is vs current along the line
+    function scoreLine(aIdx, bIdx){
+      const idx = getLineIndices(aIdx,bIdx);
+      let s=0; const tgt=state.target, cur=state.current;
+      for(let i=0;i<idx.length;i++) s += (tgt[idx[i]] - cur[idx[i]]);
+      return s/idx.length;
+    }
+
+    function drawLineToCurrent(aIdx,bIdx){
+      const idx = getLineIndices(aIdx,bIdx);
+      const cur=state.current; const amt = state.alpha;
+      for(let i=0;i<idx.length;i++) cur[idx[i]] = clamp(cur[idx[i]] + amt, 0, 1);
+
+      // draw on canvas
+      const a = state.ring[aIdx], b = state.ring[bIdx];
+      artCtx.save();
+      artCtx.globalAlpha = 1; artCtx.strokeStyle = state.lineColor; artCtx.lineWidth = state.thickness; artCtx.lineCap='round';
+      artCtx.beginPath(); artCtx.moveTo(a.x,a.y); artCtx.lineTo(b.x,b.y); artCtx.stroke();
+      artCtx.restore();
+    }
+
+    function dumpPath(){
+      $('pathOut').value = state.path.join(',');
+    }
+
+    function stepOnce(){
+      const N = state.pins; const minHop = state.minHop;
+      if(!state.path.length) state.path=[state.startPin%N];
+      const current = state.path[state.path.length-1];
+      let bestScore = -1e9, bestIdx = -1;
+      for(let cand=0;cand<N;cand++){
+        let diff = Math.abs(cand - current);
+        diff = Math.min(diff, N-diff);
+        if(diff < minHop) continue; // skip near neighbors
+        const s = scoreLine(current, cand);
+        if(s>bestScore){ bestScore=s; bestIdx=cand; }
+      }
+      if(bestIdx<0){ setStatus('Geen geldige stap gevonden.'); return false; }
+      drawLineToCurrent(current, bestIdx);
+      state.path.push(bestIdx);
+      dumpPath();
+      return true;
+    }
+
+    async function tickLoop(){
+      let step = state.path.length-1;
+      while(state.running && !state.paused && step < state.lines){
+        const ok = stepOnce();
+        if(!ok) break;
+        step++;
+        if(step%25===0){ setStatus(`Stap ${step}/${state.lines}`); await new Promise(r=>setTimeout(r)); }
+      }
+      if(step>=state.lines){ state.running=false; setStatus('Klaar.'); }
+    }
+
+    async function run(){
+      if(!state.target){ setStatus('Upload eerst een afbeelding.'); return; }
+      state.running = true; state.paused=false; $('btnPause').textContent='Pauze'; setStatus('Genereren…');
+      $('pathOut').value = '';
+      drawBoard(); // reset board drawing
+      // start at chosen pin
+      state.path = [state.startPin % state.pins];
+      tickLoop();
+    }
+
+    function exportPNG(){
+      const link = document.createElement('a');
+      link.download = 'string-art.png';
+      link.href = artCanvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function exportSVG(){
+      const d = state.diameter; const bg = state.bgColor; const lc=state.lineColor; const lw=state.thickness;
+      let svg = `<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="${d}" height="${d}" viewBox="0 0 ${d} ${d}">`;
+      svg += `<rect width="100%" height="100%" fill="${bg}"/>`;
+      // pins (as small circles)
+      for(let i=0;i<state.ring.length;i++){
+        const p = state.ring[i];
+        svg += `<circle cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="2" class="pin" fill="#94a3b8"/>`;
+      }
+      // lines
+      for(let i=1;i<state.path.length;i++){
+        const a = state.ring[state.path[i-1]], b = state.ring[state.path[i]];
+        svg += `<line x1="${a.x.toFixed(2)}" y1="${a.y.toFixed(2)}" x2="${b.x.toFixed(2)}" y2="${b.y.toFixed(2)}" stroke="${lc}" stroke-width="${lw}" stroke-linecap="round" stroke-linejoin="round"/>`;
+      }
+      svg += `</svg>`;
+      const blob = new Blob([svg], {type:'image/svg+xml'});
+      const link = document.createElement('a');
+      link.download = 'string-art.svg';
+      link.href = URL.createObjectURL(blob);
+      link.click();
+    }
+
+    function saveJSON(){
+      const payload = {
+        diameter: state.diameter,
+        pins: state.pins,
+        lines: state.lines,
+        thickness: state.thickness,
+        alpha: state.alpha,
+        lineColor: state.lineColor,
+        bgColor: state.bgColor,
+        minHop: state.minHop,
+        path: state.path,
+        startPin: state.startPin,
+        preprocess: {
+          brightness: state.brightness,
+          contrast: state.contrast,
+          gamma: state.gamma,
+          edge: state.edge,
+          invert: state.invert
+        }
+      };
+      const blob = new Blob([JSON.stringify(payload)], {type:'application/json'});
+      const a = document.createElement('a'); a.download='string-art.json'; a.href=URL.createObjectURL(blob); a.click();
+    }
+
+    function loadJSON(e){
+      const file = e.target.files[0]; if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        try{
+          const p = JSON.parse(reader.result);
+          state.diameter = p.diameter ?? state.diameter;
+          state.pins = p.pins ?? state.pins;
+          state.lines = p.lines ?? state.lines;
+          state.thickness = p.thickness ?? state.thickness;
+          state.alpha = p.alpha ?? state.alpha;
+          state.lineColor = p.lineColor ?? state.lineColor;
+          state.bgColor = p.bgColor ?? state.bgColor;
+          state.minHop = p.minHop ?? state.minHop;
+          state.path = Array.isArray(p.path) ? p.path : [];
+          state.startPin = p.startPin ?? 0;
+          if(p.preprocess){
+            state.brightness = p.preprocess.brightness ?? 0;
+            state.contrast = p.preprocess.contrast ?? 0;
+            state.gamma = p.preprocess.gamma ?? 1;
+            state.edge = p.preprocess.edge ?? 0;
+            state.invert = !!p.preprocess.invert;
+            // reflect UI for preprocessing
+            $('brightness').value = state.brightness;
+            $('contrast').value = state.contrast;
+            $('gamma').value = state.gamma;
+            $('edge').value = state.edge;
+            $('invert').checked = state.invert;
+          }
+          // reflect UI
+          $('pins').value = state.pins; $('lines').value = state.lines; $('size').value = state.diameter;
+          $('thickness').value = state.thickness; $('alpha').value = state.alpha; $('lineColor').value = state.lineColor; $('bgColor').value = state.bgColor; $('minHop').value = state.minHop; $('startPin').value = state.startPin;
+          syncLabels();
+          resizeCanvases(); buildRing(); renderTarget(); drawBoard(); dumpPath();
+          setStatus('JSON geladen.');
+        }catch(err){ console.error(err); setStatus('Kon JSON niet laden.'); }
+      }
+      reader.readAsText(file);
+    }
+
+    // init
+    (function init(){
+      syncLabels();
+      resizeCanvases();
+      buildRing();
+      drawBoard();
+    })();
+  </script>
+</body>
+</html>
